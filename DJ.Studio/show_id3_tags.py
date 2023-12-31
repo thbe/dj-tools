@@ -13,10 +13,10 @@ Purpose:      Script to show the ID3 tags of mp3 files in a
               given directory
 """
 
-import glob
-from mutagen.id3 import ID3
 import os
 import sys
+import glob
+from mutagen.id3 import ID3
 
 if len(sys.argv) != 2:
     print(f'Usage: {sys.argv[0]} <directory_path>')
