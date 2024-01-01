@@ -17,9 +17,8 @@ import os
 import sys
 import re
 import glob
-import mutagen
-from mutagen.id3 import ID3, TRCK, GRP1, TALB, TDRC, TCMP
 from datetime import datetime
+from mutagen.id3 import ID3, TRCK, GRP1, TALB, TDRC, TCMP
 
 if len(sys.argv) != 2:
     print(f'Usage: {sys.argv[0]} <directory_path>')
