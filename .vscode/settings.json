@@ -11,6 +11,7 @@
         "TDRC",
         "TLEN",
         "TPOS",
+        "trackinfo",
         "tracklist",
         "tracknum",
         "TRCK",
