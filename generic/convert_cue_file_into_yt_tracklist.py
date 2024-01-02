@@ -35,11 +35,12 @@ indices = index_pattern.findall(file_content)
 
 for i, dataset in enumerate(zip(indices, artists, titles)):
     split_minutes, split_seconds, split_frames = dataset[0].split(':')
-    total_seconds = int(split_minutes) * 60 + int(split_seconds) + int(split_frames) / 75
+    total_seconds = int(split_minutes) * 60 + \
+        int(split_seconds) + int(split_frames) / 75
     timedelta_object = datetime.timedelta(seconds=total_seconds)
-    converted_hours = timedelta_object.seconds // 3600
-    converted_minutes = (timedelta_object.seconds % 3600) // 60
-    converted_seconds = timedelta_object.seconds % 60
-    converted_time = "{:02d}:{:02d}:{:02d}".format(converted_hours, converted_minutes, converted_seconds)
-    trackinfo = converted_time + ' : ' + dataset[1] + ' - ' + dataset[2]
+    delta_hours = timedelta_object.seconds // 3600
+    delta_minutes = (timedelta_object.seconds % 3600) // 60
+    delta_seconds = timedelta_object.seconds % 60
+    formatted_time = f"{delta_hours:02d}:{delta_minutes:02d}:{delta_seconds:02d}"
+    trackinfo = formatted_time + ' : ' + dataset[1] + ' - ' + dataset[2]
     print(trackinfo)
