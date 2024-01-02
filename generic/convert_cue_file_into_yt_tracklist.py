@@ -31,7 +31,7 @@ artists = artist_pattern.findall(file_content)
 titles = title_pattern.findall(file_content)
 indices = index_pattern.findall(file_content)
 
-tracklist = ""
+tracklist = []
 for i, (title, artist, time) in enumerate(zip(titles, artists, indices)):
     tracklist += f"{time:02d} : {artist} - {title}\n"
 
