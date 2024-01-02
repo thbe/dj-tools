@@ -17,26 +17,22 @@ import re
 import sys
 
 if len(sys.argv) != 2:
-    print(f'Usage: {sys.argv[0]} <directory_path>')
+    print(f"Usage: {sys.argv[0]} <directory_path>")
     sys.exit(1)
 
-with open(sys.argv[1], 'r', encoding='utf-8') as f:
+with open(sys.argv[1], "r", encoding="utf-8") as f:
     file_content = f.read()
 
-artist_pattern = re.compile(r'[\t\t| +]PERFORMER "(.*)"')
-title_pattern = re.compile(r'[\t\t| +]TITLE "(.*)"')
-index_pattern = re.compile(r'[\t\t| +]INDEX \d\d (.*)')
+artist_pattern = re.compile(r"\t\tPERFORMER \"\w+\.?\w*\"")
+title_pattern = re.compile(r"\t\tTITLE \"\w+\.?\w*\"")
+index_pattern = re.compile(r"\t\tINDEX \d+ (\d+) (.*)")
 
-artists = re.findall(artist_pattern, file_content)
-titles = re.findall(title_pattern, file_content)
-indices = re.findall(index_pattern, file_content)
+artists = artist_pattern.findall(file_content)
+titles = title_pattern.findall(file_content)
+indices = index_pattern.findall(file_content)
 
-tracklist = ''
-for i in range(len(titles)):
-    title = titles[i]
-    artist = artists[i]
-    time = indices[i]
-
-    tracklist += f'{time} : {artist} - {title}\n'
+tracklist = ""
+for i, (title, artist, time) in enumerate(zip(titles, artists, indices)):
+    tracklist += f"{time:02d} : {artist} - {title}\n"
 
 print(tracklist)
