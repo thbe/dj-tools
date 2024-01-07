@@ -9,8 +9,8 @@ Release:      1.0.0
 ChangeLog:    v0.1.0 - Initial release
               v1.0.0 - Validated against local mp3 pool
 
-Purpose:      Script to show the ID3 tags of mp3 files in a
-              given directory
+Purpose:      Script to display the ID3 tags of a set of mp3
+              files in a given directory
 """
 
 import os

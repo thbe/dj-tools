@@ -9,7 +9,8 @@ Release:      1.0.0
 ChangeLog:    v0.1.0 - Initial release
               v1.0.0 - Validated against sample cue file
 
-Purpose:      Script to convert cue files into YT track lists
+Purpose:      Script to convert CUE export into human readable
+              text track list (e.g., for YouTube description)
 """
 
 

@@ -8,9 +8,9 @@ Most of the scripts are Python based, so you need a working Python 3 environment
 
 ## DJ.Studio
 
-* **show_id3.tags.py** - Script to show the ID3 tags of mp3 files in a given directory
-* **update_id3_tags.py** - Script to add missing ID3 tags after exporting from DJ.Studio to pre-listen the mix in Apple Music
+* **Fix_id3_tags.py** - Script to add missing ID3 tags after exporting from DJ.Studio to pre-listen the mix in Apple Music
 
 ## Generic
 
-* **convert_cue_file_into_yt_tracklist.py** - Script to convert cue files into YT track lists
+* **CUE_export_to_tracklist_converter.py** - Script to convert CUE exports into text track lists
+* **Display_id3_tags.py** - Script to show the ID3 tags of mp3 files in a given directory
