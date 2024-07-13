@@ -18,7 +18,7 @@ import sys
 import re
 import glob
 from datetime import datetime
-from mutagen.id3 import ID3, TRCK, GRP1, TALB, TDRC, TCMP
+from mutagen.id3 import ID3, GRP1, TALB, TDRC, TCMP, TCOM, TPE2, TRCK
 
 if len(sys.argv) != 2:
     print(f'Usage: {sys.argv[0]} <directory_path>')
@@ -32,31 +32,34 @@ ALBUM_DATE = date_year
 ALBUM_TITLE = 'DJ.Studio Pre-Mix ' + date_full
 COMPILATION = '1'
 COMPILATION_GROUPING = 'DJ.Studio Pre-Mix ' + date_full
+ALBUM_ARTIST = 'DJ.Studio'
+COMPOSER = 'DJ.Studio'
 
 directory_path = sys.argv[1]
 
 mp3_files = []
-for mp3_file in glob.glob(os.path.join(directory_path, "*.mp3")):
-    mp3_full_path_name = os.path.join(directory_path, mp3_file)
-    mp3_files.append(mp3_full_path_name)
+for mp3_file in sorted(glob.glob(os.path.join(directory_path, "*.mp3"))):
+    mp3_file_full_path = os.path.join(directory_path, mp3_file)
+    mp3_files.append(mp3_file_full_path)
 
-# mp3_files_count = len(mp3_files)
+mp3_files_total_count = len(mp3_files)
 
+i = 0
 for mp3_file in mp3_files:
-    id3_file = ID3(mp3_file)
-    mp3_filename = os.path.basename(mp3_file)
+    i = i + 1
+    id3_attributes = ID3(mp3_file)
+    id3_attributes_track_number = str(i) + '/' + str(mp3_files_total_count)
 
-    track_number_raw = re.findall(r"\d{3}", mp3_filename)[0]
-    track_number = re.sub(r"^0+", "", track_number_raw)
-
-    id3_file.add(TRCK(encoding=3, text=track_number))
-    id3_file.add(TDRC(encoding=3, text=ALBUM_DATE))
-    id3_file.add(TALB(encoding=3, text=ALBUM_TITLE))
-    id3_file.add(TCMP(encoding=3, text=COMPILATION))
-    id3_file.add(GRP1(encoding=3, text=COMPILATION_GROUPING))
-    id3_file.save(mp3_file)
+    id3_attributes.add(TRCK(encoding=3, text=id3_attributes_track_number))
+    id3_attributes.add(TDRC(encoding=3, text=ALBUM_DATE))
+    id3_attributes.add(TALB(encoding=3, text=ALBUM_TITLE))
+    id3_attributes.add(TCMP(encoding=3, text=COMPILATION))
+    id3_attributes.add(GRP1(encoding=3, text=COMPILATION_GROUPING))
+    id3_attributes.add(TCOM(encoding=3, text=COMPOSER))
+    id3_attributes.add(TPE2(encoding=3, text=ALBUM_ARTIST))
+    id3_attributes.save(mp3_file)
 
     print('-----------------------------------------')
     print(f'FILE={mp3_file}')
-    print(id3_file.pprint())
+    print(id3_attributes.pprint())
     print('')

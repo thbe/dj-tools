@@ -24,15 +24,15 @@ if len(sys.argv) != 2:
 
 directory_path = sys.argv[1]
 
-mp3_filenames = []
-for mp3_filename in glob.glob(os.path.join(directory_path, "*.mp3")):
-    mp3_full_path_name = os.path.join(directory_path, mp3_filename)
-    mp3_filenames.append(mp3_full_path_name)
-    id3_filename = ID3(mp3_full_path_name)
+mp3_files = []
+for mp3_file in sorted(glob.glob(os.path.join(directory_path, "*.mp3"))):
+    mp3_file_full_path = os.path.join(directory_path, mp3_file)
+    mp3_files.append(mp3_file_full_path)
+    id3_attributes = ID3(mp3_file)
 
     print('-----------------------------------------')
-    print(f'FILE={mp3_filename}')
-    print(id3_filename.pprint())
+    print(f'FILE={mp3_file}')
+    print(id3_attributes.pprint())
     print('')
 
-print(f'Read tags from {len(mp3_filenames)} mp3 files')
+print(f'Read tags from {len(mp3_files)} mp3 files')
