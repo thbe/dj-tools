@@ -4,44 +4,52 @@
 Author:       Thomas Bendler <code@thbe.org>
 Date:         Tue Jan  2 00:04:41 CET 2024
 
-Release:      1.0.0
+Release:      1.2.0
 
 ChangeLog:    v0.1.0 - Initial release
               v1.0.0 - Validated against sample cue file
+              v1.2.0 - Refactored code for clarity and maintainability
 
 Purpose:      Script to convert CUE export into human readable
               text track list (e.g., for YouTube description)
 """
 
-
 import re
 import sys
-import datetime
 
 
-if len(sys.argv) != 2:
-    print(f"Usage: {sys.argv[0]} <directory_path>")
-    sys.exit(1)
+class CueConverter:
+    def __init__(self, cue_file_path):
+        self.cue_file_path = cue_file_path
+        self.file_content = self._read_file()
+        self.time_pattern = re.compile(r'[\t| +]INDEX \d\d (.*)')
+        self.track_pattern = re.compile(r'[\t| +]TRACK (\d\d) AUDIO')
+        self.artist_pattern = re.compile(r'[\t| +]PERFORMER "(.*)"')
+        self.title_pattern = re.compile(r'[\t| +]TITLE "(.*)"')
 
-with open(sys.argv[1], "r", encoding="utf-8") as f:
-    file_content = f.read()
+    def _read_file(self):
+        with open(self.cue_file_path, "r", encoding="utf-8") as f:
+            return f.read()
 
-artist_pattern = re.compile(r'[\t\t| +]PERFORMER "(.*)"')
-title_pattern = re.compile(r'[\t\t| +]TITLE "(.*)"')
-index_pattern = re.compile(r'[\t\t| +]INDEX \d\d (.*)')
+    def parse(self):
+        times = self.time_pattern.findall(self.file_content)
+        tracks = self.track_pattern.findall(self.file_content)
+        artists = self.artist_pattern.findall(self.file_content)
+        titles = self.title_pattern.findall(self.file_content)
+        return list(zip(times, tracks, artists, titles))
 
-artists = artist_pattern.findall(file_content)
-titles = title_pattern.findall(file_content)
-indices = index_pattern.findall(file_content)
+    def print_tracklist(self):
+        for time, track, artist, title in self.parse():
+            print(f"{time} {track} {artist} - {title}")
 
-for i, dataset in enumerate(zip(indices, artists, titles)):
-    split_minutes, split_seconds, split_frames = dataset[0].split(':')
-    total_seconds = int(split_minutes) * 60 + \
-        int(split_seconds) + int(split_frames) / 75
-    timedelta_object = datetime.timedelta(seconds=total_seconds)
-    delta_hours = timedelta_object.seconds // 3600
-    delta_minutes = (timedelta_object.seconds % 3600) // 60
-    delta_seconds = timedelta_object.seconds % 60
-    formatted_time = f"{delta_hours:02d}:{delta_minutes:02d}:{delta_seconds:02d}"
-    trackinfo = formatted_time + ' : ' + dataset[1] + ' - ' + dataset[2]
-    print(trackinfo)
+
+def main():
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <cue_file_path>")
+        sys.exit(1)
+    converter = CueConverter(sys.argv[1])
+    converter.print_tracklist()
+
+
+if __name__ == "__main__":
+    main()
